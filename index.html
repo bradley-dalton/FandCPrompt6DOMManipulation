@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <title>Form</title>
+  </head>
+  <body>
+    <form id="form" action="/" method="GET">
+      <div>
+        <p>Password Verifier: please create a password that has:</p>
+        <ul>
+          <li>Five characters or more</li>
+          <li>One UPPERCASE character</li>
+          <li>One lowercase character</li>
+          <li>Two numbers</li>
+        </ul>
+
+        <div id="error"></div>
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="text" />
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+
+    <script>
+      function largerThanFive(str) {
+        return str.length > 5;
+      }
+
+      function lowerAndUpperCase(str) {
+        let lower = false;
+        let upper = false;
+        for (let i = 0; i < str.length; i++) {
+          const charCode = str.charCodeAt(i);
+          if (charCode >= 65 && charCode <= 90) {
+            upper = true;
+          }
+          if (charCode >= 97 && charCode <= 122) {
+            lower = true;
+          }
+        }
+        return lower && upper;
+      }
+
+      function atLeastTwoNumbers(str) {
+        let count = 0;
+        for (let i = 0; i < str.length; i++) {
+          if (!isNaN(parseInt(str[i]))) {
+            count++;
+          }
+        }
+        return count >= 2;
+      }
+
+      const form = document.getElementById("form");
+      const passInput = document.getElementById("password");
+
+      form.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        const password = passInput.value;
+        let isValid = true;
+        let errorMessage = "There were the following problems \n";
+
+        if (!largerThanFive(password)) {
+          isValid = false;
+          errorMessage += "password must be larger than 5 chars\n";
+        }
+
+        if (!lowerAndUpperCase(password)) {
+          isValid = false;
+          errorMessage +=
+            "password must have at least a lower and an uppercase\n";
+        }
+
+        if (!atLeastTwoNumbers(password)) {
+          isValid = false;
+          errorMessage += "password must have at least two digits\n";
+        }
+
+        if (isValid) {
+          alert("Yay! valid password!");
+          form.submit();
+        } else {
+          alert(errorMessage);
+        }
+      });
+    </script>
+  </body>
+</html>
